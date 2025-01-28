@@ -17,8 +17,6 @@ const eslintConfig = [
   ...compat.extends(
     "next/core-web-vitals",
       "plugin:tailwindcss/recommended",
-      "plugin:testing-library/react",
-      "plugin:jest-dom/recommended",
       "next/typescript",
       "prettier"
     ),
