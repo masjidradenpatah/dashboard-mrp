@@ -1,8 +1,32 @@
 "use server";
-// import { Program, ProgramExecution } from "@/types/Program";
 import { prisma } from "@/lib/db";
-import { Program, ProgramExecution, ProgramStatus } from "@prisma/client";
+import {
+  Prisma,
+  Program,
+  ProgramExecution,
+  ProgramStatus
+} from "@prisma/client";
 import { ActionResponse } from "@/types";
+import { prismaErrorChecker } from "@/lib/prismaErrorChecker";
+import z from "zod";
+import { newProgramSchema } from "@/schemas/ProgramSchemas";
+
+export async function createNewProgram(input: Prisma.ProgramCreateInput) : Promise<ActionResponse<Program>> {
+  try {
+    const newProgram = await prisma.program.create({ data: input });
+
+    return {
+      status: "SUCCESS",
+      success: "Successfully creating new program",
+      data: newProgram
+    }
+  } catch (err) {
+    const {error} = prismaErrorChecker(err);
+    return {
+      status: "ERROR", error
+    }
+  }
+}
 
 export async function getAllPrograms(): Promise<ActionResponse<Program[]>> {
   try {
@@ -18,9 +42,11 @@ export async function getAllPrograms(): Promise<ActionResponse<Program[]>> {
       success: "Successfully fetching all programs",
       data: programs,
     };
-  } catch {
-    // handle if error
-    return { status: "ERROR", error: "Something went wrong" };
+  } catch (err) {
+    const {error} = prismaErrorChecker(err);
+    return {
+      status: "ERROR", error
+    }
   }
 }
 
@@ -41,7 +67,7 @@ export async function deleteManyProgramsByID(
 
     // Delete programs in parallel
     const deletePromises = ids.map((id) =>
-      prisma.user.delete({
+      prisma.program.delete({
         where: { id },
       }),
     );
@@ -49,9 +75,11 @@ export async function deleteManyProgramsByID(
     await Promise.all(deletePromises);
 
     return { status: "SUCCESS", success: "Successfully deleted programs" };
-  } catch {
-    // handle if error
-    return { status: "ERROR", error: "Something went wrong" };
+  } catch (err) {
+    const {error} = prismaErrorChecker(err);
+    return {
+      status: "ERROR", error
+    }
   }
 }
 
@@ -103,9 +131,11 @@ export async function deleteManyUpcomingProgramByID(
     await Promise.all(deletePromises);
 
     return { status: "SUCCESS", success: "Successfully deleted programs" };
-  } catch {
-    // handle if error
-    return { status: "ERROR", error: "Something went wrong" };
+  } catch (err) {
+    const {error} = prismaErrorChecker(err);
+    return {
+      status: "ERROR", error
+    }
   }
 }
 
@@ -139,9 +169,11 @@ export async function updateUpcomingProgramStatus(
       success: "Success updating new status",
       data: updatedProgram,
     };
-  } catch {
-    // handle if error
-    return { status: "ERROR", error: "Something went wrong" };
+  } catch (err) {
+    const {error} = prismaErrorChecker(err);
+    return {
+      status: "ERROR", error
+    }
   }
 }
 
@@ -175,8 +207,11 @@ export const getUpcomingPrograms = async (
       success: "Success get upcoming program",
       data: programs,
     };
-  } catch {
-    return { status: "ERROR", success: "Something went wrong" };
+  } catch (err) {
+    const {error} = prismaErrorChecker(err);
+    return {
+      status: "ERROR", error
+    }
   }
 };
 
@@ -197,8 +232,11 @@ export const getProgramGroupByType = async (
     };
 
     // return programs as Program[];
-  } catch {
-    return { status: "ERROR", error: "Something went wrong" };
+  } catch (err) {
+    const {error} = prismaErrorChecker(err);
+    return {
+      status: "ERROR", error
+    }
   }
 };
 
@@ -217,7 +255,10 @@ export const getProgramByIdAction = async (
       success: "Success get program by ID",
       data: program,
     };
-  } catch {
-    return { status: "ERROR", error: "Something went wrong" };
+  } catch (err) {
+    const {error} = prismaErrorChecker(err);
+    return {
+      status: "ERROR", error
+    }
   }
 };

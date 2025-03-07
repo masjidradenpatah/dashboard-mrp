@@ -10,6 +10,7 @@ const GoogleSignIn = () => {
   async function onClick() {
     await signIn("google", {
       redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirect: true
     });
   }
   return (

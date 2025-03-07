@@ -26,3 +26,4 @@ export const ImageKitImage = (
     ImageKitProviderProps &
     ImageKitImageProps,
 ) => <IKImage {...props} className={props.className} />;
+

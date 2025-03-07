@@ -28,12 +28,9 @@ export function checkDevelopmentRoute(route: string): boolean {
  */
 export const publicRoutes: string[] = [
   "/",
-  "/tahfidz-camp",
-  "/new-verification",
-  "/reset-password",
+  "/auth-error",
   "/unauthorized",
   "/not-found",
-  "/contact",
 ];
 
 /**
@@ -42,9 +39,6 @@ export const publicRoutes: string[] = [
  * @type {string[]}
  */
 export const publicRoutesPrefix: string[] = [
-  "/programs",
-  "/services",
-  "/article",
 ];
 
 export function checkPublicRoute(route: string): boolean {
@@ -66,7 +60,6 @@ export function checkPublicRoute(route: string): boolean {
 export const authRoutes: string[] = [
   "/signIn",
   "/signUp",
-  // TODO : check. Is this should be here? or should be in public rotues
   "/auth-error",
   "/new-password",
 ];
@@ -83,4 +76,4 @@ export const apiAuthPrefix = "/api/auth";
  * The Default redirect path after logging in
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/";
+export const DEFAULT_LOGIN_REDIRECT = "/dashboard";

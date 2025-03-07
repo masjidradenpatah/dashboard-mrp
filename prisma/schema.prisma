@@ -1,5 +1,5 @@
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -89,8 +89,8 @@ enum ProgramType {
 model Program {
   id               String             @id // title-year-identifier
   title            String
-  description      String             @db.Text
-  content          String             @db.Text
+  description      String             @db.MediumText
+  content          String             @db.LongText
   image            String
   type             ProgramType
   customeUrl       String?
@@ -109,7 +109,7 @@ model ProgramExecution {
   image     String
   date      DateTime
   status    ProgramStatus
-  program   Program       @relation(fields: [programId], references: [id])
+  program   Program       @relation(fields: [programId], references: [id], onDelete: Cascade)
   programId String
 }
 
@@ -131,7 +131,7 @@ model Article {
   title    String
   slug     String          @unique
   category ArticleCategory @default(NOT_SET)
-  content  String          @db.Text
+  content  String          @db.LongText
   coverUrl String?
   views    Int             @default(0)
   status   ArticleStatus   @default(DRAFT)

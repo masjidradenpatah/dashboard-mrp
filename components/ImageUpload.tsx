@@ -34,7 +34,7 @@ const ImageUpload = ({
 }: {
   onFileChange: (filepath: string) => void;
 }) => {
-  const ikUplaodRef = useRef(null);
+  const ikUploadRef = useRef(null);
   const [file, setFile] = useState<{ filePath: string } | null>(null);
   const onError = () => {
     toast({
@@ -56,7 +56,7 @@ const ImageUpload = ({
       authenticator={authenticator}
     >
       <IKUpload
-        ref={ikUplaodRef}
+        ref={ikUploadRef}
         className={"hidden"}
         onError={onError}
         onSuccess={onSuccess}
@@ -67,9 +67,9 @@ const ImageUpload = ({
         <button
           onClick={(e) => {
             e.preventDefault();
-            if (ikUplaodRef.current) {
+            if (ikUploadRef.current) {
               // @ts-expect-error This is save
-              ikUplaodRef.current.click();
+              ikUploadRef.current.click();
             }
           }}
           className={
