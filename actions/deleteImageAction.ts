@@ -17,3 +17,18 @@ export async function deleteImage(fileId: string) {
     else console.log(result);
   });
 }
+
+export async function getImagePathById(fileId: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    imageKit.getFileDetails(fileId, (error, result) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        const path = result?.filePath || '';
+        console.log({ path });
+        resolve(path);
+      }
+    });
+  });
+}

@@ -9,7 +9,7 @@ import {
 import { ActionResponse } from "@/types";
 import { prismaErrorChecker } from "@/lib/prismaErrorChecker";
 import z from "zod";
-import { newProgramSchema } from "@/schemas/ProgramSchemas";
+import { programSchema } from "@/schemas/ProgramSchemas";
 
 export async function createNewProgram(input: Prisma.ProgramCreateInput) : Promise<ActionResponse<Program>> {
   try {
@@ -73,6 +73,9 @@ export async function deleteManyProgramsByID(
     );
 
     await Promise.all(deletePromises);
+
+    // TODO
+    // also delete the image in imagekit
 
     return { status: "SUCCESS", success: "Successfully deleted programs" };
   } catch (err) {
@@ -242,13 +245,16 @@ export const getProgramGroupByType = async (
 
 export const getProgramByIdAction = async (
   programId: string,
-): Promise<ActionResponse<Program>> => {
+): Promise<ActionResponse<Program & { programExecution: ProgramExecution[] }>> => {
   try {
     const program = await prisma.program.findUnique({
       where: { id: programId },
+      include: {
+        programExecution: true // This will include all program executions
+      }
     });
 
-    if (!program) return { status: "ERROR", error: "Program not found" };
+    if (!program) return { status: "ERROR", error: `Program with id (${programId})  not found` };
 
     return {
       status: "SUCCESS",
@@ -262,3 +268,30 @@ export const getProgramByIdAction = async (
     }
   }
 };
+
+
+export async function updateProgrambyId(programId:string, input: Prisma.ProgramUpdateInput) : Promise<ActionResponse<Program>> {
+  try {
+
+    // const program = await prisma.program.findUnique({where: {id:programId}})
+    // if(program)
+    //   return console.log(program)
+    // else {
+    //   console.log(programId);
+    //   return console.log("not found");
+    // }
+
+    const updatedProgram = await prisma.program.update({where: {id: programId}, data: input });
+
+    return {
+      status: "SUCCESS",
+      success: `Successfully updating program ${updatedProgram.title}`,
+      data: updatedProgram
+    }
+  } catch (err) {
+    const {error} = prismaErrorChecker(err);
+    return {
+      status: "ERROR", error
+    }
+  }
+}

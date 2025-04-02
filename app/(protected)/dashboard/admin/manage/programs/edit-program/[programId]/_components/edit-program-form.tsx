@@ -24,13 +24,21 @@ import { programSchema } from "@/schemas/ProgramSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProgramType } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
-import { createNewProgram } from "@/actions/programActions";
+import { createNewProgram, updateProgrambyId } from "@/actions/programActions";
 import { toast } from "@/hooks/use-toast";
-import { LoaderCircle, LogIn } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-const NewProgramForm = () => {
+const EditProgramForm = (params:{
+  programId:string;
+  title?:string;
+  content?: string;
+  image?: string;
+  type?: ProgramType;
+  customUrl?: string;
+  imagePath:string
+}) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof programSchema>>({
@@ -40,7 +48,8 @@ const NewProgramForm = () => {
       content: "",
       image: "", // TODO
       type: "DAILY",
-      customUrl: ""
+      customUrl: "",
+      ...params
     }
   });
 
@@ -51,15 +60,13 @@ const NewProgramForm = () => {
     }
     startTransition(async function() {
       const programtype: ProgramType = values.type as ProgramType;
-      const programId = `${values.title.replaceAll(' ','_')}-${new Date().getFullYear()}-${uuidv4()}`;
 
-      const response = await createNewProgram({
+      const response = await updateProgrambyId(params.programId,{
         image: values.image,
         title: values.title,
         content: values.content,
         customeUrl: values.customUrl,
         description: values.content,
-        id: programId,
         type: programtype
       });
 
@@ -91,11 +98,16 @@ const NewProgramForm = () => {
               <FormLabel className={"text-right"}>Image</FormLabel>
               <FormControl>
                 <ImageUpload
-                  onFileChange={(filepath)=> { form.setValue('image', filepath || '')}}
+                  onFileChange={(fileId)=> { form.setValue('image', fileId || '')}}
                   folder={'/programs'}
+                  defaultImage={params.image ? { fileId: params.image, filePath: params.imagePath }: undefined}
                 />
               </FormControl>
-              <FormDescription>It's recommended to use image with 1080 x 1080px resolution or 1:1 aspect ratio</FormDescription>
+              {!form.getValues('image')?
+                <FormDescription>It's recommended to use image with 1080 x 1080px resolution or 1:1 aspect ratio</FormDescription>
+                :
+                 null }
+
             </FormItem>
           )}
         />
@@ -190,4 +202,4 @@ const NewProgramForm = () => {
     </Form>
   );
 };
-export default NewProgramForm;
+export default EditProgramForm;

@@ -9,7 +9,7 @@ import {
   getSortedRowModel,
   SortingState,
   useReactTable,
-  VisibilityState,
+  VisibilityState
 } from "@tanstack/react-table";
 
 import {
@@ -18,14 +18,14 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
@@ -39,7 +39,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
@@ -86,7 +86,7 @@ export function selectColumn<TData>(): ColumnDef<TData> {
       </div>
     ),
     enableSorting: false,
-    enableHiding: false,
+    enableHiding: false
   };
 }
 
@@ -104,16 +104,20 @@ export function numberColumn<TData>(): ColumnDef<TData> {
       <div className={"flex max-w-8 justify-center"}>
         {table.getRowModel().rows.indexOf(row) + 1}
       </div>
-    ),
+    )
   };
 }
-export function moreActionColumn<TData>({
-  editFNAction,
-  deleteFNAction,
-}: {
-  editFNAction?: boolean;
-  deleteFNAction?: (ids: string[]) => Promise<ActionResponse<never>>;
-}): ColumnDef<TData> {
+
+export function moreActionColumn<TData>(
+  {
+    editFNAction,
+    deleteFNAction,
+    render
+  }: {
+    editFNAction?: boolean;
+    deleteFNAction?: (ids: string[]) => Promise<ActionResponse<never>>;
+    render?: (id: string) => React.ReactNode;
+  }): ColumnDef<TData> {
   return {
     id: "actions",
     header: () => <div className="max-w-16 text-center">More actions</div>,
@@ -135,6 +139,7 @@ export function moreActionColumn<TData>({
             {editFNAction ? (
               <DropdownMenuItem className={"p-0"} asChild>
                 <Button variant="ghost" size="sm" asChild>
+                  {/* TODO: Fix this*/}
                   <Link href={`/dashboard/articles/edit-article/${itemId}`}>
                     Edit
                     <SquarePen />
@@ -142,6 +147,10 @@ export function moreActionColumn<TData>({
                 </Button>
               </DropdownMenuItem>
             ) : null}
+
+            {/*  Render other option here*/}
+            {render ? render(itemId) : null}
+
             {deleteFNAction ? (
               <DropdownMenuItem className={"p-0"} asChild>
                 <Dialog>
@@ -178,12 +187,12 @@ export function moreActionColumn<TData>({
                               toast({
                                 title: "Error",
                                 description: response.error,
-                                variant: "destructive",
+                                variant: "destructive"
                               });
                             } else if (response.success) {
                               toast({
                                 title: "Success",
-                                description: response.success,
+                                description: response.success
                               });
                             }
                           });
@@ -201,21 +210,22 @@ export function moreActionColumn<TData>({
           </DropdownMenuContent>
         </DropdownMenu>
       );
-    },
+    }
   };
 }
 
-export function DataTable<TData, TValue>({
-  queryKey,
-  queryAction,
-  columns,
-  filterBy,
-  deleteFNAction,
-}: TableData<TData, TValue>) {
+export function DataTable<TData, TValue>(
+  {
+    queryKey,
+    queryAction,
+    columns,
+    filterBy,
+    deleteFNAction
+  }: TableData<TData, TValue>) {
   const { data, isFetching } = useQuery({
     queryKey: [queryKey],
     queryFn: async () => queryAction(),
-    initialData: { status: "PENDING" },
+    initialData: { status: "PENDING" }
   });
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -234,8 +244,8 @@ export function DataTable<TData, TValue>({
     state: {
       sorting,
       columnFilters,
-      columnVisibility,
-    },
+      columnVisibility
+    }
   });
 
   return (
@@ -318,18 +328,18 @@ export function DataTable<TData, TValue>({
                     // deleted selected user here
                     deleteFNAction(
                       // @ts-expect-error typescript just somehow don't know the type
-                      selected.map((item) => item.original.id),
+                      selected.map((item) => item.original.id)
                     ).then((response: ActionResponse<TData>) => {
                       if (response.status === "ERROR") {
                         toast({
                           title: "Error",
                           description: response.error,
-                          variant: "destructive",
+                          variant: "destructive"
                         });
                       } else {
                         toast({
                           title: "Congratulations!!! User successfully deleted",
-                          description: response.success,
+                          description: response.success
                         });
                       }
                     });
@@ -356,9 +366,9 @@ export function DataTable<TData, TValue>({
                   {header.isPlaceholder
                     ? null
                     : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
                 </TableHead>
               ))}
             </TableRow>
