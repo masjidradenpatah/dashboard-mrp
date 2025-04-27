@@ -15,9 +15,13 @@ const EditProgramPage = async ({params}:{params: Promise<{programId: string}>}) 
     console.log(error);
     return notFound();
   }
+let imagePath : string  = ''
+try {
+  imagePath = await getImagePathById(program.image) // todo
 
-  const imagePath = await getImagePathById(program.image) // todo
-  console.log(imagePath);
+}  catch  {
+}
+
 
   return (
     <div className={"size-full pt-12"}>

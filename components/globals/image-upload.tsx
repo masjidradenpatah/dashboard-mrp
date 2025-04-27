@@ -95,9 +95,6 @@ const ImageUpload = ({ onFileChange, folder, defaultImage }: {
         folder={folder}
       />
 
-      <p>{file?.filePath || 'null'}</p>
-      <p>{file?.fileId || 'null'}</p>
-
       {progress > 0  ? (
         <div className={'relative max-w-96 mx-auto flex justify-center' +
           ' flex-col items-center gap-2'}>

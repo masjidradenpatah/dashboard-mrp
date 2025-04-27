@@ -26,7 +26,6 @@ export async function getImagePathById(fileId: string): Promise<string> {
         reject(error);
       } else {
         const path = result?.filePath || '';
-        console.log({ path });
         resolve(path);
       }
     });

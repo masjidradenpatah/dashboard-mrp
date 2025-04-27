@@ -14,7 +14,6 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import ImageUpload
   from "@/components/globals/image-upload";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -23,12 +22,13 @@ import z from "zod";
 import { programSchema } from "@/schemas/ProgramSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProgramType } from "@prisma/client";
-import { v4 as uuidv4 } from "uuid";
-import { createNewProgram, updateProgrambyId } from "@/actions/programActions";
+import {  updateProgrambyId } from "@/actions/programActions";
 import { toast } from "@/hooks/use-toast";
 import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 
 const EditProgramForm = (params:{
   programId:string;
@@ -38,6 +38,7 @@ const EditProgramForm = (params:{
   type?: ProgramType;
   customUrl?: string;
   imagePath:string
+  description?: string;
 }) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -49,13 +50,27 @@ const EditProgramForm = (params:{
       image: "", // TODO
       type: "DAILY",
       customUrl: "",
+      description: "",
       ...params
     }
   });
 
+  const editor = useEditor({
+    extensions: [StarterKit],
+    editorProps: {
+      attributes: {
+        class:
+          '  w-full !py-2 !px-3' +
+          ' focus:outline-none  rounded-md border border-input',
+      },
+    },
+    content: params.content,
+    injectCSS: false
+  })
+
   async function onSubmit(values: z.infer<typeof programSchema>) {
     const validatedFields = programSchema.safeParse(values)
-    if(!validatedFields.success) {
+    if(!validatedFields.success || !editor) {
       return;
     }
     startTransition(async function() {
@@ -64,9 +79,9 @@ const EditProgramForm = (params:{
       const response = await updateProgrambyId(params.programId,{
         image: values.image,
         title: values.title,
-        content: values.content,
+        content: editor.getHTML(),
         customeUrl: values.customUrl,
-        description: values.content,
+        description: editor.getHTML(),
         type: programtype
       });
 
@@ -160,15 +175,34 @@ const EditProgramForm = (params:{
               <FormLabel className={"text-right"}>Content</FormLabel>
               <FormControl>
                 {/*TODO: Change this using NOVEL*/}
-                <Textarea
-                  {...field}
-                  placeholder="Masukkan penjelasan tentang program"
-                  className={"w-full  "}
-                />
+                {/*<Textarea*/}
+                {/*  {...field}*/}
+                {/*  placeholder="Masukkan penjelasan tentang program"*/}
+                {/*  className={"w-full  "}*/}
+                {/*/>*/}
+                <div>
+                  <div className="flex">
+
+                <Button variant={'ghost'} onClick={(e) => {
+                  e.preventDefault()
+                  if(editor)
+                    editor.chain().focus().toggleBold().run()
+                }}>Bold</Button>
+                    <Button variant={'ghost'} onClick={(e) => {
+                      e.preventDefault()
+                      if(editor)
+                        editor.chain().focus().toggleItalic().run()
+                    }}
+                            className={editor?.isFocused && editor?.isActive('italic') ? 'bg-blue-700' : ''}
+                    >Italic</Button>
+                  </div>
+                <EditorContent editor={editor}></EditorContent>
+                </div>
               </FormControl>
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="customUrl"
