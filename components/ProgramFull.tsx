@@ -43,7 +43,7 @@ const ProgramPreview = ({ program, className }: Props) => {
 
         <article
           className={
-            "space-y-4 text-justify lg:text-lg [&_p]:mx-auto [&_p]:[text-indent:2em] [&_p]:xl:max-w-screen-lg"
+           ' m-5 focus:outline-none'
           }
           dangerouslySetInnerHTML={{ __html: program.content }}
         />

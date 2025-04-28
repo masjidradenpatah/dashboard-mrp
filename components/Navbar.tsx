@@ -7,7 +7,6 @@ import { Button, buttonVariants } from "@/components/ui/button";
 
 import MenuToggle from "@/components/MenuToggle";
 import MobileNavbar from "@/components/MobileNavbar";
-import NavLink from "@/components/NavLink";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,13 +32,6 @@ const Navbar = ({
       >
         <div>
           <Image height={82} src={mrplogo} alt={"Logo Masjid Raden Patah"} />
-        </div>
-        <div className={"hidden gap-4 md:flex lg:gap-8"}>
-          <NavLink link={"/"} text={"Home"} />
-          <NavLink link={"/programs"} text={"Program"} />
-          <NavLink link={"/services"} text={"Layanan"} />
-          {/*<NavLink link={"/article"} text={"Artikel"} />*/}
-          <NavLink link={"/contact"} text={"Kontak"} />
         </div>
         <div className={"hidden gap-4 md:flex"}>
           {isLoggedIn ? (

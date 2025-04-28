@@ -1,4 +1,5 @@
 "use client"
+/* eslint-disable tailwindcss/enforces-shorthand */
 
 import * as React from "react"
 import * as AccordionPrimitive from "@radix-ui/react-accordion"

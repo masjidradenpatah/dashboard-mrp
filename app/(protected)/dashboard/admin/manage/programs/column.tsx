@@ -10,6 +10,11 @@ import {
   numberColumn,
   selectColumn,
 } from "@/components/Table/TableData";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Eye, SquarePen } from "lucide-react";
+import React from "react";
 
 export const columns: ColumnDef<Program>[] = [
   selectColumn<Program>(),
@@ -60,5 +65,27 @@ export const columns: ColumnDef<Program>[] = [
 
   moreActionColumn<Program>({
     deleteFNAction: deleteManyProgramsByID,
+    render: (itemId) => {
+      return (
+        <>
+          <DropdownMenuItem className={"p-0 px-2"} asChild>
+            <Button variant="ghost" size="sm" asChild>
+              <Link href={`/programs/${itemId}`}>
+                Show Details
+                <Eye />
+              </Link>
+            </Button>
+          </DropdownMenuItem>
+          <DropdownMenuItem className={"p-0 px-2"} asChild>
+            <Button variant="ghost" size="sm" asChild>
+              <Link href={`/dashboard/admin/manage/programs/edit-program/${itemId}`}>
+                Edit
+                <SquarePen />
+              </Link>
+            </Button>
+          </DropdownMenuItem>
+        </>
+      )
+    }
   }),
 ];

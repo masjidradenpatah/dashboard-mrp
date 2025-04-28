@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable tailwindcss/no-custom-classname */
 import { Lock, UserCircle, LucideProps, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import {

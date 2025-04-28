@@ -1,5 +1,5 @@
 "use client"
-
+/* eslint-disable tailwindcss/enforces-shorthand */
 import { GripVertical } from "lucide-react"
 import * as ResizablePrimitive from "react-resizable-panels"
 

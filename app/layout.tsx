@@ -36,7 +36,7 @@ export default function RootLayout({
           >
             {modal}
             {children}
-            <Toaster />
+            <Toaster  />
           </body>
         </ImageKitProvider>
       </QueryClientWrapper>

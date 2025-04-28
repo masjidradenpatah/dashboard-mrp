@@ -10,7 +10,6 @@ import {
 } from "@/schemas/authSchemas";
 import { getUserByEmail } from "@/data/User";
 import { prisma } from "@/lib/db";
-// import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
 import { getVerificationTokenByToken } from "@/data/VerificationToken";

@@ -109,7 +109,7 @@ model ProgramExecution {
   image     String
   date      DateTime
   status    ProgramStatus
-  program   Program       @relation(fields: [programId], references: [id])
+  program   Program       @relation(fields: [programId], references: [id], onDelete: Cascade)
   programId String
 }
 

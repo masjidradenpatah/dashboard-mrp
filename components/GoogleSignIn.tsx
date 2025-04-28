@@ -10,6 +10,7 @@ const GoogleSignIn = () => {
   async function onClick() {
     await signIn("google", {
       redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirect: true
     });
   }
   return (
@@ -20,7 +21,7 @@ const GoogleSignIn = () => {
       <Image
         width={24}
         height={24}
-        className={"shrin object-contain"}
+        className={"object-contain"}
         src={googleIcon}
         alt={"google"}
       />
