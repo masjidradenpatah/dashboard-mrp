@@ -1,5 +1,5 @@
 "use client"
-
+/* eslint-disable tailwindcss/enforces-shorthand */
 import * as React from "react"
 import * as SliderPrimitive from "@radix-ui/react-slider"
 

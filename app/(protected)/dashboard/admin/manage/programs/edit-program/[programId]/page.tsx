@@ -15,12 +15,13 @@ const EditProgramPage = async ({params}:{params: Promise<{programId: string}>}) 
     console.log(error);
     return notFound();
   }
-let imagePath : string  = ''
-try {
-  imagePath = await getImagePathById(program.image) // todo
+  let imagePath : string  = ''
+  try {
+    imagePath = await getImagePathById(program.image) // todo
 
-}  catch  {
-}
+  }  catch  {
+
+  }
 
 
   return (

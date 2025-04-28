@@ -1,3 +1,4 @@
+/* eslint-disable tailwindcss/no-custom-classname */
 import { Shades } from "@/components/decorations/shades";
 import React from "react";
 import Image from "next/image";

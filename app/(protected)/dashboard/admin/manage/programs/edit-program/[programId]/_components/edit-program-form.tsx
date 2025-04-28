@@ -28,7 +28,7 @@ import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import { StarterKit } from "novel/extensions";
 
 const EditProgramForm = (params:{
   programId:string;
@@ -108,7 +108,7 @@ const EditProgramForm = (params:{
         <FormField
           control={form.control}
           name="image"
-          render={({ field }) => (
+          render={({  }) => (
             <FormItem className=" ">
               <FormLabel className={"text-right"}>Image</FormLabel>
               <FormControl>
@@ -119,7 +119,7 @@ const EditProgramForm = (params:{
                 />
               </FormControl>
               {!form.getValues('image')?
-                <FormDescription>It's recommended to use image with 1080 x 1080px resolution or 1:1 aspect ratio</FormDescription>
+                <FormDescription>It&apos;s recommended to use image with 1080 x 1080px resolution or 1:1 aspect ratio</FormDescription>
                 :
                  null }
 
@@ -170,7 +170,7 @@ const EditProgramForm = (params:{
         <FormField
           control={form.control}
           name="content"
-          render={({ field }) => (
+          render={({  }) => (
             <FormItem className="">
               <FormLabel className={"text-right"}>Content</FormLabel>
               <FormControl>

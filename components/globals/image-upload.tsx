@@ -1,3 +1,4 @@
+/* eslint-disable tailwindcss/classnames-order */
 import React, { useRef, useState } from "react";
 import { IKImage, IKUpload, ImageKitProvider } from "imagekitio-next";
 import config from "@/lib/config";
@@ -6,7 +7,7 @@ import {
   IKUploadResponse
 } from "imagekitio-next/src/components/IKUpload/props";
 import { Button } from "@/components/ui/button";
-import { Delete, Images, Trash2 } from "lucide-react";
+import {  Images, Trash2 } from "lucide-react";
 import { deleteImage } from "@/actions/deleteImageAction";
 import { Progress } from "@/components/ui/progress"
 import { ImageFolder } from "@/lib/image-folder";

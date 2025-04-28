@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 
-// @ts-ignore
+// @ts-expect-error hard to predict
 export function prismaErrorChecker(error) {
   if (error === null) {
     console.error("Error fetching upcoming programs: error is null");

@@ -21,7 +21,7 @@ const GoogleSignIn = () => {
       <Image
         width={24}
         height={24}
-        className={"shrin object-contain"}
+        className={"object-contain"}
         src={googleIcon}
         alt={"google"}
       />

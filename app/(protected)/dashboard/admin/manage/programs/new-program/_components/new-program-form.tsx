@@ -26,7 +26,7 @@ import { ProgramType } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { createNewProgram } from "@/actions/programActions";
 import { toast } from "@/hooks/use-toast";
-import { LoaderCircle, LogIn } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -86,7 +86,7 @@ const NewProgramForm = () => {
         <FormField
           control={form.control}
           name="image"
-          render={({ field }) => (
+          render={({ }) => (
             <FormItem className=" ">
               <FormLabel className={"text-right"}>Image</FormLabel>
               <FormControl>
@@ -95,7 +95,7 @@ const NewProgramForm = () => {
                   folder={'/programs'}
                 />
               </FormControl>
-              <FormDescription>It's recommended to use image with 1080 x 1080px resolution or 1:1 aspect ratio</FormDescription>
+              <FormDescription>It&apos;s recommended to use image with 1080 x 1080px resolution or 1:1 aspect ratio</FormDescription>
             </FormItem>
           )}
         />

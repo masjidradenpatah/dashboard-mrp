@@ -73,7 +73,8 @@ const ImageUpload = ({
             }
           }}
           className={
-            "border-lg flex items-center justify-center gap-2 border py-2 text-sm"
+            " flex items-center justify-center gap-2 border py-2" +
+            " text-sm"
           }
         >
           <Images className={"text-gray-400"}></Images>

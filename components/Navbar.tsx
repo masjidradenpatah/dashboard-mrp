@@ -7,7 +7,6 @@ import { Button, buttonVariants } from "@/components/ui/button";
 
 import MenuToggle from "@/components/MenuToggle";
 import MobileNavbar from "@/components/MobileNavbar";
-import NavLink from "@/components/NavLink";
 import {
   DropdownMenu,
   DropdownMenuContent,

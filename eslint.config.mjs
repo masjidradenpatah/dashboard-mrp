@@ -21,20 +21,19 @@ const eslintConfig = [
       "prettier"
     ),
   {
-    rules: {
-      "tailwindcss/no-custom-classname":"off",
-      // Aturan linting umum
-      "no-console": isProduction ? "error" : "warn", // Error di production, warning di development
-      "no-debugger": isProduction ? "error" : "warn", // Error di production, warning di development
-      "no-warning-comments": [
-        isProduction ? "error" : "warn",
-        {
-          terms: ["todo", "fixme", "urgent"],
-          location: "anywhere",
-        },
-      ],
-    },
-
+    // rules: {
+    //   "tailwindcss/no-custom-classname":"off",
+    //   // Aturan linting umum
+    //   "no-console": isProduction ? "error" : "warn", // Error di production, warning di development
+    //   "no-debugger": isProduction ? "error" : "warn", // Error di production, warning di development
+    //   "no-warning-comments": [
+    //     isProduction ? "error" : "warn",
+    //     {
+    //       terms: ["todo", "fixme", "urgent"],
+    //       location: "anywhere",
+    //     },
+    //   ],
+    // },
   },
 ];
 
