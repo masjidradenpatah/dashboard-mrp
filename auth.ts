@@ -25,6 +25,11 @@ export const {
   },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
+
+      console.log({user})
+      console.log({account});
+      console.log(profile);
+
       // Allow Oauth without email verification
       if (account?.provider !== "credentials") {
         return true;
@@ -40,7 +45,11 @@ export const {
       session.user = token.user;
       return session;
     },
-    async jwt({ token, user, account, profile, isNewUser }) {
+    async jwt({ token, user, account, profile}) {
+      console.log({token});
+      console.log({user});
+      console.log({profile});
+      
       if (user) {
         token.user = user;
       }
