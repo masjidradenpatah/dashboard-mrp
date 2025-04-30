@@ -8,8 +8,6 @@ import {
 } from "@prisma/client";
 import { ActionResponse } from "@/types";
 import { prismaErrorChecker } from "@/lib/prismaErrorChecker";
-import z from "zod";
-import { programSchema } from "@/schemas/ProgramSchemas";
 
 export async function createNewProgram(input: Prisma.ProgramCreateInput) : Promise<ActionResponse<Program>> {
   try {
@@ -19,6 +17,35 @@ export async function createNewProgram(input: Prisma.ProgramCreateInput) : Promi
       status: "SUCCESS",
       success: "Successfully creating new program",
       data: newProgram
+    }
+  } catch (err) {
+    const {error} = prismaErrorChecker(err);
+    return {
+      status: "ERROR", error
+    }
+  }
+}
+
+export async function createNewUpcomingProgram(input: Prisma.ProgramExecutionCreateWithoutProgramInput, programId: string) : Promise<ActionResponse<ProgramExecution>> {
+  try {
+    const newUpcomingProgram = await prisma.programExecution.create({
+      data: {
+        ...input,
+        program: {
+          connect: {
+            id: programId
+          }
+        }
+      },
+      include : {
+        program: true
+      }
+    });
+
+    return {
+      status: "SUCCESS",
+      success: "Successfully creating a new upcoming program",
+      data: newUpcomingProgram
     }
   } catch (err) {
     const {error} = prismaErrorChecker(err);
@@ -97,6 +124,33 @@ export async function getAllUpcomingProgram(): Promise<
     if (programExecutions.length === 0) {
       return { status: "ERROR", error: "Programs do not exist" };
     }
+
+    return {
+      status: "SUCCESS",
+      success: "Successfully get all upcoming program",
+      data: programExecutions,
+    };
+  } catch {
+    // handle if error
+    return { status: "ERROR", error: "Something went wrong" };
+  }
+}
+
+export async function getFirstUpcomingProgram(): Promise<
+  ActionResponse<ProgramExecution[]>
+> {
+  // return prisma.programExecution.findMany();
+  try {
+    //  bagaimana cara query hanya ambil show order  yang tidak null saja
+    const programExecutions: ProgramExecution[] = await prisma.programExecution.findMany({
+      where: {
+        showOrder: { not: null } // Hanya ambil yang showOrder-nya tidak null
+      },
+      orderBy: {
+        showOrder: 'asc' // Opsional: urutkan berdasarkan showOrder
+      },
+      take: 3 // Batasi hasil
+    });
 
     return {
       status: "SUCCESS",
@@ -197,7 +251,7 @@ export const getUpcomingPrograms = async (
         },
       },
       orderBy: {
-        date: "asc", // Urutkan berdasarkan tanggal terdekat
+        showOrder: "asc", // Urutkan berdasarkan tanggal terdekat
       },
       take: numberItem === "all" ? undefined : numberItem || 3, // Batasi jumlah hasil
       include: {
@@ -273,14 +327,6 @@ export const getProgramByIdAction = async (
 export async function updateProgrambyId(programId:string, input: Prisma.ProgramUpdateInput) : Promise<ActionResponse<Program>> {
   try {
 
-    // const program = await prisma.program.findUnique({where: {id:programId}})
-    // if(program)
-    //   return console.log(program)
-    // else {
-    //   console.log(programId);
-    //   return console.log("not found");
-    // }
-
     const updatedProgram = await prisma.program.update({where: {id: programId}, data: input });
 
     return {
@@ -293,5 +339,29 @@ export async function updateProgrambyId(programId:string, input: Prisma.ProgramU
     return {
       status: "ERROR", error
     }
+  }
+}
+
+export async function updateManyUpcomingProgram(
+  updates: { id: string; data: Prisma.ProgramExecutionUpdateInput }[]
+): Promise<ActionResponse<ProgramExecution[]>> {
+  try {
+    const results = await prisma.$transaction(
+      updates.map(update =>
+        prisma.programExecution.update({
+          where: { id: update.id },
+          data: update.data
+        })
+      )
+    );
+
+    return {
+      status: "SUCCESS",
+      success: `Successfully updated ${results.length} upcoming program`,
+      data: results
+    };
+  } catch (err) {
+    const { error } = prismaErrorChecker(err);
+    return { status: "ERROR", error };
   }
 }

@@ -13,7 +13,7 @@ import {
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Eye, SquarePen } from "lucide-react";
+import { CalendarRange, Eye, SquarePen } from "lucide-react";
 import React from "react";
 
 export const columns: ColumnDef<Program>[] = [
@@ -81,6 +81,16 @@ export const columns: ColumnDef<Program>[] = [
               <Link href={`/dashboard/admin/manage/programs/edit-program/${itemId}`}>
                 Edit
                 <SquarePen />
+              </Link>
+            </Button>
+          </DropdownMenuItem>
+          <DropdownMenuItem className={"p-0 px-2"} asChild>
+            <Button variant="ghost" size="sm" asChild>
+              <Link
+                href={{pathname:`/dashboard/admin/manage/upcoming-programs/new`, query: { id: itemId }}}
+              >
+                Create Upcoming Program
+                <CalendarRange />
               </Link>
             </Button>
           </DropdownMenuItem>

@@ -6,7 +6,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel,
+  getSortedRowModel, Row,
   SortingState,
   useReactTable,
   VisibilityState
@@ -116,7 +116,7 @@ export function moreActionColumn<TData>(
   }: {
     editFNAction?: boolean;
     deleteFNAction?: (ids: string[]) => Promise<ActionResponse<never>>;
-    render?: (id: string) => React.ReactNode;
+    render?: (id: string, row?: Row<TData>) => React.ReactNode;
   }): ColumnDef<TData> {
   return {
     id: "actions",
@@ -149,7 +149,7 @@ export function moreActionColumn<TData>(
             ) : null}
 
             {/*  Render other option here*/}
-            {render ? render(itemId) : null}
+            {render ? render(itemId, row) : null}
 
             {deleteFNAction ? (
               <DropdownMenuItem className={"p-0"} asChild>

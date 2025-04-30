@@ -29,6 +29,11 @@ import { toast } from "@/hooks/use-toast";
 import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import Tiptap from "@/components/globals/Tiptap";
+import { useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+import { Heading } from "@tiptap/extension-heading";
+import { TextAlign } from "@tiptap/extension-text-align";
 
 const NewProgramForm = () => {
   const router = useRouter();
@@ -37,10 +42,10 @@ const NewProgramForm = () => {
     resolver: zodResolver(programSchema),
     defaultValues: {
       title: "",
-      content: "",
+      content: "<p>Start writing the program&apos;s description here</p>",
       image: "", // TODO
       type: "DAILY",
-      customUrl: ""
+      customUrl: "",
     }
   });
 
@@ -56,9 +61,9 @@ const NewProgramForm = () => {
       const response = await createNewProgram({
         image: values.image,
         title: values.title,
-        content: values.content,
+        content: editor.getHTML(),
         customeUrl: values.customUrl,
-        description: values.content,
+        description: editor.getText(),
         id: programId,
         type: programtype
       });
@@ -78,6 +83,35 @@ const NewProgramForm = () => {
     });
     router.push('/dashboard/admin/manage/programs');
   }
+
+  const editor = useEditor({
+    extensions: [
+      // @ts-expect-error no problem for now
+      StarterKit,
+      Heading.configure({
+        HTMLAttributes: {
+          class: "tiptap-heading "
+        }
+      }),
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+        defaultAlignment: 'justify'
+      }),
+    ],
+    immediatelyRender: false,
+    editorProps: {
+      attributes: {
+        class:
+          "  w-full !py-2 !px-3 min-h-[300px]" +
+          " focus:outline-none  rounded-md border border-input"
+      }
+    },
+    content: "<p>Start writing the program&apos;s description here</p>",
+    injectCSS: false
+  });
+
+  if(!editor)
+    return null
 
   return (
     <Form {...form}>
@@ -143,16 +177,11 @@ const NewProgramForm = () => {
         <FormField
           control={form.control}
           name="content"
-          render={({ field }) => (
+          render={({  }) => (
             <FormItem className="">
               <FormLabel className={"text-right"}>Content</FormLabel>
               <FormControl>
-                {/*TODO: Change this using NOVEL*/}
-                <Textarea
-                  {...field}
-                  placeholder="Masukkan penjelasan tentang program"
-                  className={"w-full  "}
-                />
+                <Tiptap editor={editor} />
               </FormControl>
             </FormItem>
           )}

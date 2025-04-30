@@ -1,9 +1,16 @@
 import z from "zod";
 
 export const programSchema = z.object({
-  title: z.string().min(1, { message: "Title is required" }), // Must be non-empty
-  content: z.string().min(1, { message: "Content is required" }), // Must be non-empty
-  image: z.string().min(1, { message: "Image is required" }), // Must be non-empty
-  type: z.string().min(1, { message: "Type is required" }), // Must be non-empty
+  title: z.string().min(1, { message: "Title is required" }),
+  content: z.string().min(1, { message: "Content is required" }),
+  image: z.string().min(1, { message: "Image is required" }),
+  type: z.string().min(1, { message: "Type is required" }),
   customUrl: z.string().optional(), // Optional, can be empty or undefined
+});
+
+export const upcomingProgramSchema = z.object({
+  title: z.string().min(1, { message: "Title is required" }),
+  image: z.string().min(1, { message: "Image is required" }),
+  date: z.date().nullish(),
+  status: z.string().min(1, { message: "Status is required" }),
 });

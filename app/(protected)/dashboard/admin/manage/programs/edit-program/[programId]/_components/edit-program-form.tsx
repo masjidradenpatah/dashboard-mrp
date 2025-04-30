@@ -1,8 +1,9 @@
-"use client"
+"use client";
 import React, { useTransition } from "react";
 import {
   Form,
-  FormControl, FormDescription,
+  FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel
@@ -10,34 +11,37 @@ import {
 import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectContent, SelectItem,
+  SelectContent,
+  SelectItem,
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import ImageUpload
-  from "@/components/globals/image-upload";
+import ImageUpload from "@/components/globals/image-upload";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { programSchema } from "@/schemas/ProgramSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProgramType } from "@prisma/client";
-import {  updateProgrambyId } from "@/actions/programActions";
+import { updateProgrambyId } from "@/actions/programActions";
 import { toast } from "@/hooks/use-toast";
-import { LoaderCircle } from "lucide-react";
+import {  LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { EditorContent, useEditor } from "@tiptap/react";
-import { StarterKit } from "novel/extensions";
+import {  useEditor } from "@tiptap/react";
+import Tiptap from "@/components/globals/Tiptap";
+import { Heading } from "@tiptap/extension-heading";
+import { TextAlign } from "@tiptap/extension-text-align";
+import { StarterKit } from "@tiptap/starter-kit";
 
-const EditProgramForm = (params:{
-  programId:string;
-  title?:string;
+const EditProgramForm = (params: {
+  programId: string;
+  title?: string;
   content?: string;
   image?: string;
   type?: ProgramType;
   customUrl?: string;
-  imagePath:string
+  imagePath: string
   description?: string;
 }) => {
   const router = useRouter();
@@ -56,32 +60,45 @@ const EditProgramForm = (params:{
   });
 
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [
+      // @ts-expect-error no problem for now
+      StarterKit,
+      Heading.configure({
+        HTMLAttributes: {
+          class: "tiptap-heading "
+        }
+      }),
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+        defaultAlignment: 'justify'
+      }),
+    ],
+    immediatelyRender: false,
     editorProps: {
       attributes: {
         class:
-          '  w-full !py-2 !px-3' +
-          ' focus:outline-none  rounded-md border border-input',
-      },
+          "  w-full !py-2 !px-3 min-h-[300px]" +
+          " focus:outline-none  rounded-md border border-input"
+      }
     },
     content: params.content,
     injectCSS: false
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof programSchema>) {
-    const validatedFields = programSchema.safeParse(values)
-    if(!validatedFields.success || !editor) {
+    const validatedFields = programSchema.safeParse(values);
+    if (!validatedFields.success || !editor) {
       return;
     }
     startTransition(async function() {
       const programtype: ProgramType = values.type as ProgramType;
 
-      const response = await updateProgrambyId(params.programId,{
+      const response = await updateProgrambyId(params.programId, {
         image: values.image,
         title: values.title,
         content: editor.getHTML(),
         customeUrl: values.customUrl,
-        description: editor.getHTML(),
+        description: editor.getText(),
         type: programtype
       });
 
@@ -98,8 +115,11 @@ const EditProgramForm = (params:{
         });
       }
     });
-    router.push('/dashboard/admin/manage/programs');
+    router.push("/dashboard/admin/manage/programs");
   }
+
+  if(!editor)
+    return null;
 
   return (
     <Form {...form}>
@@ -108,20 +128,26 @@ const EditProgramForm = (params:{
         <FormField
           control={form.control}
           name="image"
-          render={({  }) => (
+          render={({}) => (
             <FormItem className=" ">
               <FormLabel className={"text-right"}>Image</FormLabel>
               <FormControl>
                 <ImageUpload
-                  onFileChange={(fileId)=> { form.setValue('image', fileId || '')}}
-                  folder={'/programs'}
-                  defaultImage={params.image ? { fileId: params.image, filePath: params.imagePath }: undefined}
+                  onFileChange={(fileId) => {
+                    form.setValue("image", fileId || "");
+                  }}
+                  folder={"/programs"}
+                  defaultImage={params.image ? {
+                    fileId: params.image,
+                    filePath: params.imagePath
+                  } : undefined}
                 />
               </FormControl>
-              {!form.getValues('image')?
-                <FormDescription>It&apos;s recommended to use image with 1080 x 1080px resolution or 1:1 aspect ratio</FormDescription>
+              {!form.getValues("image") ?
+                <FormDescription>It&apos;s recommended to use image with 1080 x
+                  1080px resolution or 1:1 aspect ratio</FormDescription>
                 :
-                 null }
+                null}
 
             </FormItem>
           )}
@@ -170,34 +196,11 @@ const EditProgramForm = (params:{
         <FormField
           control={form.control}
           name="content"
-          render={({  }) => (
+          render={({}) => (
             <FormItem className="">
               <FormLabel className={"text-right"}>Content</FormLabel>
               <FormControl>
-                {/*TODO: Change this using NOVEL*/}
-                {/*<Textarea*/}
-                {/*  {...field}*/}
-                {/*  placeholder="Masukkan penjelasan tentang program"*/}
-                {/*  className={"w-full  "}*/}
-                {/*/>*/}
-                <div>
-                  <div className="flex">
-
-                <Button variant={'ghost'} onClick={(e) => {
-                  e.preventDefault()
-                  if(editor)
-                    editor.chain().focus().toggleBold().run()
-                }}>Bold</Button>
-                    <Button variant={'ghost'} onClick={(e) => {
-                      e.preventDefault()
-                      if(editor)
-                        editor.chain().focus().toggleItalic().run()
-                    }}
-                            className={editor?.isFocused && editor?.isActive('italic') ? 'bg-blue-700' : ''}
-                    >Italic</Button>
-                  </div>
-                <EditorContent editor={editor}></EditorContent>
-                </div>
+                  <Tiptap editor={editor} />
               </FormControl>
             </FormItem>
           )}
@@ -222,8 +225,9 @@ const EditProgramForm = (params:{
           )}
         />
 
-        {isPending  ? (
-          <div className={cn(buttonVariants({variant: 'default'}), 'bg-primary/50 hover:bg-primary/50 active:bg-primary/40')}>
+        {isPending ? (
+          <div
+            className={cn(buttonVariants({ variant: "default" }), "bg-primary/50 hover:bg-primary/50 active:bg-primary/40")}>
             <span>Loading </span>
             <LoaderCircle className={"animate-spin"}></LoaderCircle>
           </div>
