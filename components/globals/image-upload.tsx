@@ -47,6 +47,7 @@ const ImageUpload = ({ onFileChange, folder, defaultImage }: {
   const onUploadEnd = () => {setProgress(0)}
 
   const onError = (err: UploadError) => {
+    console.log({err});
     toast({
       title: "Failed",
       description: err.message,
