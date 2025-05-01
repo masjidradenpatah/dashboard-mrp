@@ -8,8 +8,8 @@ import {
   Heading1,
   Heading2,
   Heading3,
-  Italic, List, ListOrdered, Redo, Redo2,
-  Underline, Undo2
+  Italic, List, ListOrdered, Redo2,
+  Undo2
 } from "lucide-react";
 import React from "react";
 import { Editor } from "@tiptap/core";

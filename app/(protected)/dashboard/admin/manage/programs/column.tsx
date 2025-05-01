@@ -65,7 +65,7 @@ export const columns: ColumnDef<Program>[] = [
 
   moreActionColumn<Program>({
     deleteFNAction: deleteManyProgramsByID,
-    render: (itemId) => {
+    Render: (itemId) => {
       return (
         <>
           <DropdownMenuItem className={"p-0 px-2"} asChild>

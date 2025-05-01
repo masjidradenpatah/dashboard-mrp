@@ -5,7 +5,6 @@ import {
   CardFooter,
   CardHeader
 } from "@/components/ui/card";
-import UserRoleBadge from "@/components/UserRoleBadge";
 import { Loader } from "lucide-react";
 
 const Loading = () => {

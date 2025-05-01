@@ -106,7 +106,7 @@ enum ProgramStatus {
 model ProgramExecution {
   id        String        @id @default(cuid())
   title     String
-  image     String
+  image     String?
   date      DateTime?
   showOrder Int?
   status    ProgramStatus

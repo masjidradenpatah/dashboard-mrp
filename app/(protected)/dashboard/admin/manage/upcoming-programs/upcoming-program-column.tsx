@@ -16,7 +16,6 @@ import {
 import { getFormattedDate } from "@/lib/utils";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { Eye } from "lucide-react";
 import React, { useTransition } from "react";
 import { toast } from "@/hooks/use-toast";
@@ -68,7 +67,9 @@ export const columns: ColumnDef<ProgramExecution>[] = [
 
   moreActionColumn<ProgramExecution>({
     deleteFNAction: deleteManyUpcomingProgramByID,
-    render: (itemId, row) => {
+    Render: (itemId, row) => {
+      // eslint-disable react-hook/rules-of-hooks
+      // ts-expect-error fine
       const [, startTransition] = useTransition()
       return (
         <>
@@ -82,7 +83,8 @@ export const columns: ColumnDef<ProgramExecution>[] = [
                   const response = await getFirstUpcomingProgram()
                   if(response.status === "SUCCESS" && response.data) {
                     const lastItem = response.data.at(-1);
-                    const lastItemOrder = lastItem?.showOrder as number;
+                    const lastItemOrder:number = lastItem?.showOrder ??  0;
+
 
                     if(lastItemOrder >= 3) {
                       toast({

@@ -14,7 +14,6 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import ImageUpload
   from "@/components/globals/image-upload";
 import { Button, buttonVariants } from "@/components/ui/button";
