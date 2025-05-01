@@ -1,10 +1,4 @@
-import Hero from "@/components/sections/home/Hero";
-import Information from "@/components/sections/home/Information";
-import Profile from "@/components/sections/home/Profile";
-import Map from "@/components/sections/home/Map";
-import Facilities from "@/components/sections/home/Facilities";
-import Gallery from "@/components/sections/home/Gallery";
-import Donate from "@/components/sections/home/Donate";
+import Hero from '@/components/Hero'
 
 export default function Home() {
   return (
@@ -14,12 +8,6 @@ export default function Home() {
       }
     >
       <Hero />
-      <Information />
-      <Profile />
-      <Facilities />
-      <Gallery />
-      <Donate />
-      <Map />
     </div>
   );
 }

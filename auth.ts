@@ -25,6 +25,7 @@ export const {
   },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
+
       // Allow Oauth without email verification
       if (account?.provider !== "credentials") {
         return true;
@@ -40,7 +41,7 @@ export const {
       session.user = token.user;
       return session;
     },
-    async jwt({ token, user, account, profile, isNewUser }) {
+    async jwt({ token, user, account, profile}) {
       if (user) {
         token.user = user;
       }

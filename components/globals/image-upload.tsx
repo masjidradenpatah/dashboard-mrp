@@ -4,7 +4,7 @@ import { IKImage, IKUpload, ImageKitProvider } from "imagekitio-next";
 import config from "@/lib/config";
 import { toast } from "@/hooks/use-toast";
 import {
-  IKUploadResponse
+  IKUploadResponse, UploadError
 } from "imagekitio-next/src/components/IKUpload/props";
 import { Button } from "@/components/ui/button";
 import {  Images, Trash2 } from "lucide-react";
@@ -46,10 +46,10 @@ const ImageUpload = ({ onFileChange, folder, defaultImage }: {
   const onUploadStart = () => {setProgress(0)}
   const onUploadEnd = () => {setProgress(0)}
 
-  const onError = () => {
+  const onError = (err: UploadError) => {
     toast({
       title: "Failed",
-      description: "Your image couldn't be uploaded",
+      description: err.message,
       variant: "destructive"
     });
     onUploadEnd();

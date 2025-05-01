@@ -106,8 +106,9 @@ enum ProgramStatus {
 model ProgramExecution {
   id        String        @id @default(cuid())
   title     String
-  image     String
-  date      DateTime
+  image     String?
+  date      DateTime?
+  showOrder Int?
   status    ProgramStatus
   program   Program       @relation(fields: [programId], references: [id], onDelete: Cascade)
   programId String
